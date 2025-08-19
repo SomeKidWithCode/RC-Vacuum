@@ -7,7 +7,7 @@
 
 #define VRX_PIN 5
 #define VRY_PIN 6
-#define SW_PIN 8
+#define SW_PIN 4
 
 
 bool swit = false;
@@ -18,9 +18,10 @@ const byte writingPipe[6] = "000002";
 
 void setup() {
   transceiver.begin();
+  transceiver.openWritingPipe(writingPipe);
   transceiver.setPALevel(RF24_PA_MIN);
 
-  transceiver.setPayloadSize(sizeof(int));
+  transceiver.setPayloadSize(sizeof(char));
 
   Serial.begin(9600);
 
@@ -34,13 +35,16 @@ void loop() {
   int y = analogRead(VRY_PIN);
   int sw = digitalRead(SW_PIN);
 
-  int va = 69;
+  if (Serial.available()) {
+    char input = Serial.parseInt();
+    transceiver.write(&input, sizeof(char));
+  }
 
-  transceiver.write(&va, sizeof(int));
 
   //Serial.println(x);
   //Serial.println(y);
   //Serial.println(sw);
+  delay(250);
 }
 
 class Test {

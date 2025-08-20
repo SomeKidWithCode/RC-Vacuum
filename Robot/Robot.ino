@@ -64,6 +64,11 @@ Motor rightMotor(MOTOR_B_IN_1, MOTOR_B_IN_2);
 
 
 void setup() {
+  // Begin serial
+  Serial.begin(115200);
+  // Wait for serial to be ready
+  while (!Serial) {}
+
   // Transceiver setup
   transceiver.begin();
   transceiver.openReadingPipe(0, readingPipe);

@@ -8,8 +8,8 @@
 #define CSN_PIN 10
 
 // Joystick pins
-#define VRX_PIN 5
-#define VRY_PIN 6
+#define VRX_PIN A0
+#define VRY_PIN A1
 #define SW_PIN 4
 
 // Defining transceiver things
@@ -19,14 +19,16 @@ const byte writingPipe[6] = "000002";
 
 
 void setup() {
+  // Begin serial
+  Serial.begin(115200);
+  // Wait for serial to be ready
+  while (!Serial) {}
+
   // Transceiver setup
   transceiver.begin();
   transceiver.openWritingPipe(writingPipe);
   transceiver.setPALevel(RF24_PA_MIN);
   transceiver.setPayloadSize(sizeof(char));
-
-  // Begin serial
-  Serial.begin(9600);
 
   // Set pins
   pinMode(VRX_PIN, INPUT);
@@ -35,6 +37,7 @@ void setup() {
 }
 
 void loop() {
+  // Read joystick values
   int x = analogRead(VRX_PIN);
   int y = analogRead(VRY_PIN);
   int sw = digitalRead(SW_PIN);
@@ -45,7 +48,7 @@ void loop() {
   }
 
 
-  //Serial.println(x);
+  Serial.println(x);
   //Serial.println(y);
   //Serial.println(sw);
   delay(250);
